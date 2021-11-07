@@ -10,7 +10,7 @@ class ParticulaCuadrada implements Particula {
     ParticulaCuadrada() {
         px = random(25, width - 25);
         py = random(25, height - 25);
-        c = color(random(255), random(255), random(255));
+        c = color(96, 230, 150);
     }
     
     ParticulaCuadrada(float px, float py){
@@ -22,6 +22,7 @@ class ParticulaCuadrada implements Particula {
         // Si choca, pinta de verde (r,g,b)
         if (colision()) fill(color(0, 255, 0));
         else fill(c);
+        
         square(px, py, lado);
     }
     void mover() {
@@ -44,9 +45,13 @@ class ParticulaCuadrada implements Particula {
     }
     boolean colision() {
       // Si este cuadrado (this) choca con algún círculo p, regresa true
-       for (ParticulaRedonda p : particulasRedondas) {
+       //for (ParticulaRedonda p : particulasRedondas) {
+       //     //if (colisiona(p, this)) return true;
+       //     if (colisiona(p, new ParticulaCuadrada(px, py))) return true;
+       // }
+       for (Particula p : particulas) {
             //if (colisiona(p, this)) return true;
-            if (colisiona(p, new ParticulaCuadrada(px, py))) return true;
+            if (p instanceof ParticulaRedonda && colisiona((ParticulaRedonda)p, this)) return true;
         }
         // Si no choca con ningún círculo, regresa false
         return false;
@@ -64,12 +69,13 @@ class ParticulaRedonda implements Particula {
     ParticulaRedonda() {
         px = random(25, width - 25);
         py = random(25, height - 25);
-        c = color(random(255), random(255), random(255));
+        c = color(34, 8, 24);
     }
     void display() {
         // Si choca, pinta de verde (r,g,b)
         if (colision()) fill(color(0, 255, 0));
         else fill(c);
+        
         circle(px, py, radio);
     }
     void mover() {
@@ -89,8 +95,11 @@ class ParticulaRedonda implements Particula {
     }
     boolean colision() {
       // Si este circulo (this) choca con algún cuadrado p, regresa true
-        for (int i=0; i<particulasCuadradas.size(); i++) {
-            if (colisiona(this, particulasCuadradas.get(i))) return true;
+        //for (int i=0; i<particulasCuadradas.size(); i++) {
+        //    if (colisiona(this, particulasCuadradas.get(i))) return true;
+        //}
+       for (int i=0; i<particulas.size(); i++) {
+            if (particulas.get(i) instanceof ParticulaCuadrada &&  colisiona(this, (ParticulaCuadrada)particulas.get(i))) return true;
         }
         // Si no choca con ningún cuadrado, regresa false
         return false;
@@ -119,22 +128,25 @@ boolean colisiona(ParticulaRedonda circulo, ParticulaCuadrada cuad) {
 }
 
 
+ArrayList< Particula > particulas;
 
-ArrayList < ParticulaCuadrada > particulasCuadradas;
-ArrayList < ParticulaRedonda > particulasRedondas;
 void setup() {
     size(500, 500);
+    //frameRate(60);
+    
+    particulas = new ArrayList();
+    
     // Crea la lista de cuadrados
-    particulasCuadradas = new ArrayList();
     // Agrega 10 cuadrados
     for (int i = 0; i < 10; i++) {
-        particulasCuadradas.add(new ParticulaCuadrada());
+        //particulasCuadradas.add(new ParticulaCuadrada());
+        particulas.add(new ParticulaCuadrada());
     }
     // Crea la lista de circulos
-    particulasRedondas = new ArrayList();
     // Agrega 20 cuadrados
     for (int i = 0; i < 20; i++) {
-        particulasRedondas.add(new ParticulaRedonda());
+        //particulasRedondas.add(new ParticulaRedonda());
+        particulas.add(new ParticulaRedonda());
     }
 }
 
@@ -142,13 +154,18 @@ void draw() {
   // Pinta el fondo
     background(255);
     // Para cada cuadrado lo pinta y lo mueve
-    for (ParticulaCuadrada p: particulasCuadradas) {
+    //for (ParticulaCuadrada p: particulasCuadradas) {
+    //    p.display();
+    //    p.mover();
+    //}
+    //// Para cada circulo lo pinta y lo mueve
+    //for (int i=0; i<particulasRedondas.size(); i++) {
+    //    particulasRedondas.get(i).display();
+    //    particulasRedondas.get(i).mover();
+    //}
+    
+    for (Particula p: particulas) {
         p.display();
         p.mover();
-    }
-    // Para cada circulo lo pinta y lo mueve
-    for (int i=0; i<particulasRedondas.size(); i++) {
-        particulasRedondas.get(i).display();
-        particulasRedondas.get(i).mover();
     }
 }
