@@ -12,6 +12,11 @@ class ParticulaCuadrada implements Particula {
         py = random(25, height - 25);
         c = color(random(255), random(255), random(255));
     }
+    
+    ParticulaCuadrada(float px, float py){
+      this.px=px;
+      this.py=py;
+    }
 
     void display() {
         // Si choca, pinta de verde (r,g,b)
@@ -39,8 +44,9 @@ class ParticulaCuadrada implements Particula {
     }
     boolean colision() {
       // Si este cuadrado (this) choca con algún círculo p, regresa true
-       for (ParticulaRedonda p: particulasRedondas) {
-            if (colisiona(p, this)) return true;
+       for (ParticulaRedonda p : particulasRedondas) {
+            //if (colisiona(p, this)) return true;
+            if (colisiona(p, new ParticulaCuadrada(px, py))) return true;
         }
         // Si no choca con ningún círculo, regresa false
         return false;
